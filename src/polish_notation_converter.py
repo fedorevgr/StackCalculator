@@ -13,19 +13,14 @@ class Converter:
             'cot': 4,
             'log': 4,
             'ln': 4,
-            '-sin': 4,
-            '-cos': 4,
-            '-tan': 4,
-            '-cot': 4,
-            '-log': 4,
-            '-ln': 4,
+            'UM': 4
         }
 
         self.operations = ['+', '-', '*', '/', '^']
 
-        self.functions = ['sin', 'cos', 'tan', 'cot', 'log', 'ln', '-sin', '-cos', '-tan', '-cot', '-log', '-ln']
+        self.functions = ['sin', 'cos', 'tan', 'cot', 'log', 'ln', 'UM']
 
-        self.consts = ['pi', 'e', '-pi', '-e', 'x', '-x']
+        self.consts = ['pi', 'e', 'x']
 
     def convert(self, expression):
         stack = []

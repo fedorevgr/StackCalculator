@@ -4,10 +4,25 @@ import string
 class Lexer:
     _OPERATIONS = '+-*/^'
 
+    def define_unary_minus(self):
+        for elem_id in range(len(self._result) - 1):
+            elem = self._result[elem_id]
+            if elem == '-':
+                if elem_id == 0:
+                    self._result[elem_id] = 'UM'
+                else:
+                    previous_elem = self._result[elem_id - 1]
+                    if previous_elem in list('()^+-*/'):
+                        self._result[elem_id] = 'UM'
+
     def convert_numbers_from(self):
         for item_id in range(len(self._result)):
-            if self._result[item_id][-1].isdigit():
-                self._result[item_id] = float(self._result[item_id])
+            item = self._result[item_id]
+            try:
+                item = float(item)
+            except ValueError:
+                continue
+            self._result[item_id] = item
 
     def __init__(self):
         self._state = 'S'
@@ -47,8 +62,9 @@ class Lexer:
         self._result = []
 
     def _flush_buffer(self):
-        self._result.append(self._buffer)
-        self._buffer = ''
+        if self._buffer:
+            self._result.append(self._buffer)
+            self._buffer = ''
 
     def _add_char_to_buffer(self):
         self._buffer += self._current_char
@@ -65,7 +81,8 @@ class Lexer:
             self._flush_current_char()
             return 'S'
         if self._current_char == '-':
-            self._add_char_to_buffer()
+            # self._add_char_to_buffer()
+            self._flush_current_char()
             return 'S'
 
         if self._current_char in string.ascii_lowercase and self._current_char != 'x':
@@ -196,15 +213,9 @@ class Lexer:
 
         self._flush_buffer()
 
-        to_del = []
-        for item_id in range(len(self._result)):
-            if not self._result[item_id]:
-                to_del.append(item_id)
-
-        for item in to_del:
-            del self._result[item]
-
         self.convert_numbers_from()
+
+        self.define_unary_minus()
 
         out = self._result.copy()
 
