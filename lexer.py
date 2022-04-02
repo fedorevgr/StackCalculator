@@ -1,11 +1,12 @@
 import string
 
+
 class Lexer:
     _OPERATIONS = '+-*/^'
 
     def convert_numbers_from(self):
         for item_id in range(len(self._result)):
-            if self._result[item_id][0].isdigit():
+            if self._result[item_id][-1].isdigit():
                 self._result[item_id] = float(self._result[item_id])
 
     def __init__(self):
@@ -171,18 +172,6 @@ class Lexer:
                   f'{expression}\n{"~" * (len(expression) - 1)}^\033[0m')
             return None
 
-        to_del = []
-        for item_id in range(len(self._result)):
-            if not self._result[item_id]:
-                to_del.append(item_id)
-
-        for item in to_del:
-            del self._result[item]
-
-        self.convert_numbers_from()
-
-        out = self._result
-
         if self._brackets_count != 0:
             brackets = []
             if self._brackets_count > 0:
@@ -206,10 +195,19 @@ class Lexer:
             return None
 
         self._flush_buffer()
+
+        to_del = []
+        for item_id in range(len(self._result)):
+            if not self._result[item_id]:
+                to_del.append(item_id)
+
+        for item in to_del:
+            del self._result[item]
+
+        self.convert_numbers_from()
+
+        out = self._result.copy()
+
         self._reset()
 
         return out
-
-
-
-
