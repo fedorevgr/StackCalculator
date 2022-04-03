@@ -13,20 +13,19 @@ class Converter:
             'cot': 4,
             'log': 4,
             'ln': 4,
+            'exp': 4,
             'UM': 4
         }
 
         self.operations = ['+', '-', '*', '/', '^']
 
-        self.functions = ['sin', 'cos', 'tan', 'cot', 'log', 'ln', 'UM']
-
-        self.consts = ['pi', 'e', 'x']
+        self.functions = ['sin', 'cos', 'tan', 'cot', 'log', 'ln', 'UM', 'exp']
 
     def convert(self, expression):
         stack = []
         output = []
         for token in expression:
-            if isinstance(token, float) or token in self.consts:
+            if isinstance(token, float) or token == 'x':
                 output.append(token)
             else:
                 if not stack:

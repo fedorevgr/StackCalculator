@@ -30,7 +30,7 @@ class Lexer:
         self._index = 0
         self._current_char = ''
         self._brackets_count = 0
-        self._is_function = False
+        self.is_function = False
         self._result = []
 
         self._machine = {
@@ -58,7 +58,7 @@ class Lexer:
         self._index = 0
         self._current_char = ''
         self._brackets_count = 0
-        self._is_function = False
+        self.is_function = False
         self._result = []
 
     def _flush_buffer(self):
@@ -90,6 +90,7 @@ class Lexer:
             return 'F'
 
         if self._current_char == 'x':
+            self.is_function = True
             self._add_char_to_buffer()
             self._flush_buffer()
             return 'X'
@@ -153,7 +154,7 @@ class Lexer:
             return 'S'
 
     def _state_x(self):
-        self._is_function = True
+        self.is_function = True
 
         if self._current_char == ')':
             self._flush_current_char()
@@ -219,6 +220,6 @@ class Lexer:
 
         out = self._result.copy()
 
-        self._reset()
+        # self._reset()
 
         return out
